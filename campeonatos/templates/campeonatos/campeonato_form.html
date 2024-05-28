@@ -1,0 +1,13 @@
+<!-- campeonatos/templates/campeonatos/campeonato_form.html -->
+{% extends "base_generic.html" %}
+
+{% block title %}Novo Campeonato{% endblock %}
+
+{% block content %}
+  <h1>Novo Campeonato</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+  </form>
+{% endblock %}

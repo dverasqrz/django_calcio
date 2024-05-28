@@ -1,0 +1,17 @@
+<!-- campeonatos/templates/campeonatos/campeonato_list.html -->
+{% extends "campeonatos/base_generic.html" %}
+
+{% block title %}Lista de Campeonatos{% endblock %}
+
+{% block content %}
+  <h1>Campeonatos</h1>
+  {% if object_list %}
+    <ul>
+      {% for campeonato in object_list %}
+        <li><a href="{% url 'campeonato_detail' campeonato.pk %}">{{ campeonato.nome }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Não existem campeonatos cadastrados.</p>
+  {% endif %}
+{% endblock %}

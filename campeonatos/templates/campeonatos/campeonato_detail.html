@@ -1,0 +1,24 @@
+<!-- campeonatos/templates/campeonatos/campeonato_detail.html -->
+{% extends "base_generic.html" %}
+
+{% block title %}Detalhes do Campeonato{% endblock %}
+
+{% block content %}
+  <h1>{{ object.nome }}</h1>
+  <p>Data de início: {{ object.data_inicio }}</p>
+  <p>Data de fim: {{ object.data_fim }}</p>
+
+  <h2>Times</h2>
+  <ul>
+    {% for time in object.times.all %}
+      <li>{{ time.nome }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Jogos</h2>
+  <ul>
+    {% for jogo in object.jogos.all %}
+      <li>{{ jogo.time_casa }} vs {{ jogo.time_fora }} - {{ jogo.data }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

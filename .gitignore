@@ -1,0 +1,53 @@
+# Python bytecode
+_pycache_/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Django migrations
+/migrations/
+!*/migrations/_init_.py
+
+# Database files
+*.sqlite3
+
+# Media files (uploads)
+media/
+
+# Static files (collected)
+staticfiles/
+
+# Sensitive settings
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Node modules (if you are using Node.js)
+node_modules/
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Test output
+*.out
+*.spec
+
+# macOS system files
+*.DS_Store
