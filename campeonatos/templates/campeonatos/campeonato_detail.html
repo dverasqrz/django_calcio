@@ -11,31 +11,64 @@
   <div class="container">
     <div class="header">
       <h1>{{ object.nome }}</h1>
-      <p><strong>Data de início:</strong> {{ object.data_inicio }}</p>
-      <p><strong>Data de fim:</strong> {{ object.data_fim }}</p>
+      <div class="dates">
+        <p><strong>Data de início:</strong> {{ object.data_inicio }}</p>
+        <p><strong>Data de fim:</strong> {{ object.data_fim }}</p>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Times</h2>
-      <ul>
+    <div class="section teams">
+      <h2>Times Participantes</h2>
+      <ul class="team-list">
         {% for time in object.times.all %}
-          <li>{{ time.nome }}</li>
+          <li class="team-item">{{ time.nome }}</li>
         {% endfor %}
       </ul>
     </div>
 
-    <div class="section">
+    <div class="section classification">
+      <h2>Classificação Geral</h2>
+      <table class="classification-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Jogos</th>
+            <th>Pontos</th>
+            <th>Gols Pró</th>
+            <th>Gols Contra</th>
+            <th>Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for time, stats in object.get_classificacao %}
+            <tr>
+              <td>{{ time.nome }}</td>
+              <td>{{ stats.jogos }}</td>
+              <td>{{ stats.pontos }}</td>
+              <td>{{ stats.gols_pro }}</td>
+              <td>{{ stats.gols_contra }}</td>
+              <td>{{ stats.saldo }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section games">
       <h2>Jogos</h2>
-      <div>
-        {% for jogo in object.jogos.all %}
+      <div class="game-cards compact">
+        {% for jogo in object.get_jogos_validos %}
           <div class="game-card">
-            <p><strong>{{ jogo.time_casa }} vs {{ jogo.time_fora }}</strong></p>
-            <p>Data: {{ jogo.data }}</p>
-            <p>Placar: {{ jogo.gols_time_casa }} - {{ jogo.gols_time_fora }}</p>
+            <div class="teams">
+              <span class="team-home">{{ jogo.time_casa }}</span>
+              <span class="vs"> X </span>
+              <span class="team-away">{{ jogo.time_fora }}</span>
+            </div>
+            <p class="date"><strong>Data:</strong> {{ jogo.data }}</p>
+            <p class="score"><strong>Placar:</strong> {{ jogo.gols_time_casa }} - {{ jogo.gols_time_fora }}</p>
           </div>
         {% endfor %}
       </div>
     </div>
-
   </div>
 {% endblock %}
