@@ -1,0 +1,13 @@
+<!-- campeonatos/templates/campeonatos/user_campeonatos.html -->
+{% extends "base_generic.html" %}
+
+{% block title %}Meus Campeonatos{% endblock %}
+
+{% block content %}
+  <h1>Meus Campeonatos</h1>
+  <ul>
+    {% for campeonato in campeonatos %}
+      <li><a href="{% url 'campeonato_detail' campeonato.pk %}">{{ campeonato.nome }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

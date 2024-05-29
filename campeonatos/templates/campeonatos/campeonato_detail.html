@@ -1,24 +1,41 @@
 <!-- campeonatos/templates/campeonatos/campeonato_detail.html -->
-{% extends "base_generic.html" %}
+{% extends "campeonatos/base_generic.html" %}
+
+{% load static %}
 
 {% block title %}Detalhes do Campeonato{% endblock %}
 
 {% block content %}
-  <h1>{{ object.nome }}</h1>
-  <p>Data de início: {{ object.data_inicio }}</p>
-  <p>Data de fim: {{ object.data_fim }}</p>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-  <h2>Times</h2>
-  <ul>
-    {% for time in object.times.all %}
-      <li>{{ time.nome }}</li>
-    {% endfor %}
-  </ul>
+  <div class="container">
+    <div class="header">
+      <h1>{{ object.nome }}</h1>
+      <p><strong>Data de início:</strong> {{ object.data_inicio }}</p>
+      <p><strong>Data de fim:</strong> {{ object.data_fim }}</p>
+    </div>
 
-  <h2>Jogos</h2>
-  <ul>
-    {% for jogo in object.jogos.all %}
-      <li>{{ jogo.time_casa }} vs {{ jogo.time_fora }} - {{ jogo.data }}</li>
-    {% endfor %}
-  </ul>
+    <div class="section">
+      <h2>Times</h2>
+      <ul>
+        {% for time in object.times.all %}
+          <li>{{ time.nome }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Jogos</h2>
+      <div>
+        {% for jogo in object.jogos.all %}
+          <div class="game-card">
+            <p><strong>{{ jogo.time_casa }} vs {{ jogo.time_fora }}</strong></p>
+            <p>Data: {{ jogo.data }}</p>
+            <p>Placar: {{ jogo.gols_time_casa }} - {{ jogo.gols_time_fora }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
 {% endblock %}

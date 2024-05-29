@@ -1,4 +1,6 @@
 # campeonatos/models.py
+
+from django.contrib.auth.models import User
 from django.db import models
 
 class Campeonato(models.Model):
@@ -6,10 +8,12 @@ class Campeonato(models.Model):
         ('estaduais', 'Estaduais'),
         ('nacionais', 'Nacionais'),
     ]
+    
     nome = models.CharField(max_length=100)
     data_inicio = models.DateField()
     data_fim = models.DateField()
-    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='estaduais')  # Define um valor padrão)
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='estaduais')
+    users = models.ManyToManyField(User, related_name='campeonatos')
 
     def __str__(self):
         return self.nome
