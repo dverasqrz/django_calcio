@@ -1,4 +1,5 @@
 # futebol/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 from campeonatos.views import index

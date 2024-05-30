@@ -1,0 +1,10 @@
+<!-- campeonatos/templates/campeonatos/campeonato_not_found.html -->
+{% extends "campeonatos/base_generic.html" %}
+
+{% block title %}Campeonato Não Encontrado{% endblock %}
+
+{% block content %}
+  <h1>Campeonato Não Encontrado</h1>
+  <p>O campeonato que você está procurando não foi encontrado. Por favor, verifique o ID e tente novamente.</p>
+  <p><a href="{% url 'campeonato_list' %}">Voltar para a lista de campeonatos</a></p>
+{% endblock %}

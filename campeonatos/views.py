@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from .models import Campeonato
 from .forms import CampeonatoForm
+from collections import defaultdict
 
 class OnlySuperUserMixin(UserPassesTestMixin):
     def test_func(self):
@@ -25,6 +26,20 @@ class CampeonatoListView(ListView):
 class CampeonatoDetailView(DetailView):
     model = Campeonato
     template_name = 'campeonatos/campeonato_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.object.times.count() % 2 == 0:
+            context['jogos_por_rodada'] = self.get_jogos_por_rodada()
+        else:
+            context['jogos'] = self.object.get_jogos_validos().order_by('data')
+        return context
+
+    def get_jogos_por_rodada(self):
+        jogos_por_rodada = defaultdict(list)
+        for jogo in self.object.jogos.all().order_by('rodada', 'data'):
+            jogos_por_rodada[jogo.rodada].append(jogo)
+        return dict(jogos_por_rodada)
 
 class CampeonatoCreateView(OnlySuperUserMixin, CreateView):
     model = Campeonato

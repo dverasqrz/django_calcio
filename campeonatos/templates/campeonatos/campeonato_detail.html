@@ -2,6 +2,7 @@
 {% extends "campeonatos/base_generic.html" %}
 
 {% load static %}
+{% load tz %}
 
 {% block title %}Detalhes do Campeonato{% endblock %}
 
@@ -27,13 +28,13 @@
     </div>
 
     <div class="section classification">
-      <h2>Classificação Geral</h2>
+      <h2>Classificação</h2>
       <table class="classification-table">
         <thead>
           <tr>
             <th>Time</th>
-            <th>Jogos</th>
             <th>Pontos</th>
+            <th>Jogos</th>
             <th>Gols Pró</th>
             <th>Gols Contra</th>
             <th>Saldo</th>
@@ -43,8 +44,8 @@
           {% for time, stats in object.get_classificacao %}
             <tr>
               <td>{{ time.nome }}</td>
-              <td>{{ stats.jogos }}</td>
               <td>{{ stats.pontos }}</td>
+              <td>{{ stats.jogos }}</td>
               <td>{{ stats.gols_pro }}</td>
               <td>{{ stats.gols_contra }}</td>
               <td>{{ stats.saldo }}</td>
@@ -56,19 +57,40 @@
 
     <div class="section games">
       <h2>Jogos</h2>
-      <div class="game-cards compact">
-        {% for jogo in object.get_jogos_validos %}
-          <div class="game-card">
-            <div class="teams">
-              <span class="team-home">{{ jogo.time_casa }}</span>
-              <span class="vs"> X </span>
-              <span class="team-away">{{ jogo.time_fora }}</span>
-            </div>
-            <p class="date"><strong>Data:</strong> {{ jogo.data }}</p>
-            <p class="score"><strong>Placar:</strong> {{ jogo.gols_time_casa }} - {{ jogo.gols_time_fora }}</p>
+      {% if object.times.count|divisibleby:2 %}
+        {% for rodada, jogos in jogos_por_rodada.items %}
+          <h3>{{ rodada }}ª Rodada</h3>
+          <div class="game-cards">
+            {% for jogo in jogos %}
+              <div class="game-card">
+                <div class="teams">
+                  <span class="team-home">{{ jogo.time_casa }} vs </span>
+                  <span class="team-away">{{ jogo.time_fora }}</span>
+                </div>
+                <p class="date"><strong>Data:</strong> {% localtime on %}{{ jogo.data }}{% endlocaltime %}</p>
+                {% if jogo.gols_time_casa >= 0 and jogo.gols_time_fora >= 0 %}
+                  <p class="score"><strong>Placar:</strong> {{ jogo.gols_time_casa }} - {{ jogo.gols_time_fora }}</p>
+                {% endif %}
+              </div>
+            {% endfor %}
           </div>
         {% endfor %}
-      </div>
+      {% else %}
+        <div class="game-cards">
+          {% for jogo in jogos %}
+            <div class="game-card">
+              <div class="teams">
+                <span class="team-home">{{ jogo.time_casa }} vs </span>
+                <span class="team-away">{{ jogo.time_fora }}</span>
+              </div>
+              <p class="date"><strong>Data:</strong> {% localtime on %}{{ jogo.data }}{% endlocaltime %}</p>
+              {% if jogo.gols_time_casa >= 0 and jogo.gols_time_fora >= 0 %}
+                <p class="score"><strong>Placar:</strong> {{ jogo.gols_time_casa }} - {{ jogo.gols_time_fora }}</p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

@@ -1,8 +1,8 @@
 # campeonatos/models.py
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 class Campeonato(models.Model):
     TIPO_CHOICES = [
@@ -20,13 +20,16 @@ class Campeonato(models.Model):
         return self.nome
 
     def get_jogos_validos(self):
-        return self.jogos.filter(gols_time_casa__isnull=False, gols_time_fora__isnull=False, data__range=(self.data_inicio, self.data_fim))
+        return self.jogos.filter(data__range=(self.data_inicio, self.data_fim))
 
     def get_classificacao(self):
         times = self.times.all()
         classificacao = {time: {'pontos': 0, 'gols_pro': 0, 'gols_contra': 0, 'saldo': 0, 'jogos': 0} for time in times}
         
         for jogo in self.get_jogos_validos():
+            if jogo.gols_time_casa == -1 or jogo.gols_time_fora == -1:
+                continue
+
             time_casa = jogo.time_casa
             time_fora = jogo.time_fora
             gols_casa = jogo.gols_time_casa
@@ -66,8 +69,14 @@ class Jogo(models.Model):
     time_casa = models.ForeignKey(Time, related_name='jogos_casa', on_delete=models.CASCADE)
     time_fora = models.ForeignKey(Time, related_name='jogos_fora', on_delete=models.CASCADE)
     data = models.DateTimeField()
-    gols_time_casa = models.IntegerField(null=True, blank=True)
-    gols_time_fora = models.IntegerField(null=True, blank=True)
+    gols_time_casa = models.IntegerField(default=-1)
+    gols_time_fora = models.IntegerField(default=-1)
+    rodada = models.IntegerField(default=1)
+
+    def save(self, *args, **kwargs):
+        if timezone.is_naive(self.data):
+            self.data = timezone.make_aware(self.data)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.time_casa} vs {self.time_fora}"

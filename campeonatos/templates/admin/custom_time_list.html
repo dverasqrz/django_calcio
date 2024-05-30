@@ -1,0 +1,25 @@
+<!-- templates/admin/custom_time_list.html -->
+
+{% extends "admin/base_site.html" %}
+
+{% block title %}Times e Campeonatos{% endblock %}
+
+{% block content %}
+  <h1>Selecione time para modificar</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Campeonato</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for time in times %}
+        <tr>
+          <td>{{ time.nome }}</td>
+          <td>{{ time.campeonato.nome }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
